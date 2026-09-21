@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cupGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C0392B" />
+      <stop offset="60%" stop-color="#E74C3C" />
+      <stop offset="100%" stop-color="#922B21" />
+    </linearGradient>
+    <linearGradient id="lidGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#BDC3C7" />
+      <stop offset="100%" stop-color="#ECF0F1" />
+    </linearGradient>
+  </defs>
+  <!-- Background Glow -->
+  <circle cx="100" cy="100" r="90" fill="#1C1814" />
+
+  <!-- Straw -->
+  <path d="M125 30 L115 65 L95 160" fill="none" stroke="#D7A84B" stroke-width="8" stroke-linecap="round" />
+  <path d="M120 40 L128 36" stroke="#FFFFFF" stroke-width="2" />
+  <path d="M117 44 L125 40" stroke="#FFFFFF" stroke-width="2" />
+
+  <!-- Cup Body -->
+  <polygon points="65,75 135,75 125,175 75,175" fill="url(#cupGrad)" />
+
+  <!-- Cup Lid -->
+  <ellipse cx="100" cy="75" rx="38" ry="10" fill="url(#lidGrad)" stroke="#95A5A6" stroke-width="2" />
+  <ellipse cx="100" cy="72" rx="25" ry="6" fill="#BDC3C7" />
+
+  <!-- Cinema Ribbon / Wave Logo on Cup -->
+  <path d="M68 115 Q100 95 132 125 L129 135 Q98 105 70 125 Z" fill="#FFFFFF" opacity="0.9" />
+  <circle cx="100" cy="120" r="16" fill="#111" stroke="#D7A84B" stroke-width="1.5" />
+  <text x="100" y="124" font-family="'Playfair Display', serif" font-size="8" font-weight="bold" fill="#D7A84B" text-anchor="middle">COLA</text>
+
+  <!-- Ice / condensation drops -->
+  <circle cx="85" cy="95" r="2" fill="#FFFFFF" opacity="0.6" />
+  <circle cx="120" cy="105" r="2.5" fill="#FFFFFF" opacity="0.6" />
+  <circle cx="78" cy="140" r="1.5" fill="#FFFFFF" opacity="0.5" />
+  <circle cx="118" cy="150" r="2" fill="#FFFFFF" opacity="0.5" />
+</svg>

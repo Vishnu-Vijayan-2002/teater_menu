@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="nachoChip" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9E79F" />
+      <stop offset="100%" stop-color="#D4AC0D" />
+    </linearGradient>
+    <linearGradient id="cheeseDip" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F5B041" />
+      <stop offset="100%" stop-color="#D35400" />
+    </linearGradient>
+  </defs>
+  <!-- Background Glow -->
+  <circle cx="100" cy="100" r="90" fill="#1C1814" />
+
+  <!-- Nacho Chips -->
+  <!-- Chip 1 -->
+  <polygon points="55,140 100,55 125,125" fill="url(#nachoChip)" stroke="#B7950B" stroke-width="1.5" />
+  <!-- Chip 2 -->
+  <polygon points="90,135 150,70 165,145" fill="url(#nachoChip)" stroke="#B7950B" stroke-width="1.5" />
+  <!-- Chip 3 (Front Center) -->
+  <polygon points="70,150 115,80 145,155" fill="url(#nachoChip)" stroke="#B7950B" stroke-width="1.5" />
+
+  <!-- Drizzled Cheese -->
+  <path d="M75 120 Q95 105 110 125 T145 130" fill="none" stroke="url(#cheeseDip)" stroke-width="8" stroke-linecap="round" />
+  <path d="M85 135 Q105 120 125 140" fill="none" stroke="url(#cheeseDip)" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Jalapeno Slices -->
+  <ellipse cx="95" cy="115" rx="7" ry="5" fill="#1E8449" stroke="#52BE80" stroke-width="2" />
+  <circle cx="95" cy="115" r="2" fill="#145A32" />
+
+  <ellipse cx="125" cy="125" rx="8" ry="6" fill="#1E8449" stroke="#52BE80" stroke-width="2" />
+  <circle cx="125" cy="125" r="2.5" fill="#145A32" />
+
+  <!-- Salsa Cup -->
+  <path d="M35 135 L65 135 L60 165 L40 165 Z" fill="#922B21" />
+  <ellipse cx="50" cy="135" rx="15" ry="5" fill="#C0392B" />
+  <circle cx="48" cy="135" r="2" fill="#27AE60" />
+  <circle cx="53" cy="136" r="1.5" fill="#F4D03F" />
+</svg>

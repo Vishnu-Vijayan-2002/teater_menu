@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="burgerBun" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F5B041" />
+      <stop offset="100%" stop-color="#BA4A00" />
+    </linearGradient>
+    <linearGradient id="patty" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6E2C00" />
+      <stop offset="100%" stop-color="#3E1A03" />
+    </linearGradient>
+  </defs>
+  <!-- Background Glow -->
+  <circle cx="100" cy="100" r="90" fill="#1C1814" />
+  
+  <!-- Top Bun -->
+  <path d="M45 92 C45 52 155 52 155 92 Z" fill="url(#burgerBun)" />
+  <!-- Sesame seeds -->
+  <ellipse cx="80" cy="68" rx="3" ry="1.5" fill="#FFF5D6" />
+  <ellipse cx="100" cy="60" rx="3" ry="1.5" fill="#FFF5D6" />
+  <ellipse cx="120" cy="68" rx="3" ry="1.5" fill="#FFF5D6" />
+  <ellipse cx="90" cy="78" rx="3" ry="1.5" fill="#FFF5D6" />
+  <ellipse cx="110" cy="78" rx="3" ry="1.5" fill="#FFF5D6" />
+
+  <!-- Lettuce -->
+  <path d="M40 96 C48 90 56 102 64 96 C72 90 80 102 88 96 C96 90 104 102 112 96 C120 90 128 102 136 96 C144 90 152 102 160 96 L158 103 C150 108 142 98 134 103 C126 108 118 98 110 103 C102 108 94 98 86 103 C78 108 70 98 62 103 C54 108 46 98 38 103 Z" fill="#2ECC71" />
+
+  <!-- Tomato -->
+  <rect x="44" y="103" width="112" height="10" rx="5" fill="#E74C3C" />
+
+  <!-- Melted Cheese -->
+  <polygon points="46,115 154,115 145,130 130,120 115,132 95,118 75,128 60,118 50,124" fill="#F1C40F" />
+
+  <!-- Meat Patty -->
+  <rect x="42" y="122" width="116" height="20" rx="10" fill="url(#patty)" />
+
+  <!-- Bottom Bun -->
+  <path d="M48 144 L152 144 C152 160 140 168 100 168 C60 168 48 160 48 144 Z" fill="url(#burgerBun)" />
+</svg>

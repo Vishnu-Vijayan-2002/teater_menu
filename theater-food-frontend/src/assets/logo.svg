@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" width="160" height="48">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a68ff" />
+      <stop offset="50%" stop-color="#0052ff" />
+      <stop offset="100%" stop-color="#003ecb" />
+    </linearGradient>
+  </defs>
+  <!-- Clapperboard / Film Reel Icon -->
+  <g transform="translate(4, 6)">
+    <rect x="0" y="0" width="36" height="36" rx="9" fill="url(#goldGrad)" />
+    <!-- Clapper top stripe -->
+    <path d="M0 0 L36 0 L36 12 L0 12 Z" fill="#070b14" rx="4" />
+    <polygon points="6,0 12,0 8,12 2,12" fill="#ffffff" />
+    <polygon points="17,0 23,0 19,12 13,12" fill="#ffffff" />
+    <polygon points="28,0 34,0 30,12 24,12" fill="#ffffff" />
+    <!-- Play / Fork icon inside -->
+    <circle cx="18" cy="24" r="8" fill="#070b14" />
+    <polygon points="16,20 22,24 16,28" fill="#ffffff" />
+  </g>
+  <!-- Text -->
+  <text x="48" y="24" font-family="'Playfair Display', Georgia, serif" font-size="19" font-weight="800" letter-spacing="2.5" fill="#FFFFFF">CINÉMA</text>
+  <text x="49" y="36" font-family="system-ui, sans-serif" font-size="8" font-weight="700" letter-spacing="3" fill="#ffffff">GOURMET &amp; LOUNGE</text>
+</svg>

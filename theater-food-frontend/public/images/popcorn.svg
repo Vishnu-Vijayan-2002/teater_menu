@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="popTub" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E50914" />
+      <stop offset="100%" stop-color="#9B0008" />
+    </linearGradient>
+    <linearGradient id="popCorn" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF2A3" />
+      <stop offset="100%" stop-color="#E5A823" />
+    </linearGradient>
+  </defs>
+  <!-- Background Glow -->
+  <circle cx="100" cy="100" r="90" fill="#1C1814" />
+  
+  <!-- Popcorn Tub -->
+  <polygon points="55,90 145,90 135,175 65,175" fill="url(#popTub)" />
+  <!-- Tub Stripes -->
+  <polygon points="73,90 85,90 82,175 72,175" fill="#FFFFFF" opacity="0.9" />
+  <polygon points="95,90 105,90 103,175 97,175" fill="#FFFFFF" opacity="0.9" />
+  <polygon points="115,90 127,90 123,175 117,175" fill="#FFFFFF" opacity="0.9" />
+
+  <!-- Popcorn Pieces -->
+  <g fill="url(#popCorn)">
+    <circle cx="70" cy="85" r="16" />
+    <circle cx="90" cy="75" r="18" />
+    <circle cx="110" cy="72" r="19" />
+    <circle cx="130" cy="82" r="17" />
+    <circle cx="80" cy="62" r="15" />
+    <circle cx="100" cy="52" r="18" />
+    <circle cx="120" cy="60" r="16" />
+    <circle cx="100" cy="38" r="15" />
+    <circle cx="60" cy="78" r="12" />
+    <circle cx="140" cy="76" r="13" />
+  </g>
+  <!-- Butter / Detail Accents -->
+  <path d="M92 48 Q98 42 108 46 Q100 56 92 48 Z" fill="#FFA500" opacity="0.8" />
+  <path d="M72 70 Q80 62 88 72 Q78 80 72 70 Z" fill="#FFA500" opacity="0.7" />
+  <path d="M112 65 Q122 58 126 68 Q118 75 112 65 Z" fill="#FFA500" opacity="0.7" />
+  <!-- Cinema badge on tub -->
+  <rect x="75" y="115" width="50" height="24" rx="4" fill="#111" stroke="#D7A84B" stroke-width="2" />
+  <text x="100" y="131" font-family="'Playfair Display', serif" font-size="10" font-weight="bold" fill="#D7A84B" text-anchor="middle">CINÉMA</text>
+</svg>

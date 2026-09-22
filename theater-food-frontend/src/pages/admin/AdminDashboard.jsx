@@ -59,7 +59,7 @@ import StatCard from "../../admin/components/StatCard";
 import OrderTable from "../../admin/components/OrderTable";
 import MenuTable from "../../admin/components/MenuTable";
 import OrderStatusBadge from "../../admin/components/OrderStatusBadge";
-
+import CampaignBuilder from "./components/CampaignBuilder";
 import { useAdminAuth } from "../../admin/context/AdminAuthContext";
 import { getSalesmen, saveSalesmen, setSalesmanPassword, getReviews, saveReviews } from "../../services/salesmanService";
 import { getTheaterConfig, saveTheaterConfig as persistTheaterConfig } from "../../utils/theaterConfig";
@@ -250,15 +250,35 @@ const initialMenu = [
 ];
 
 export default function AdminDashboard() {
+    const [activePage, setActivePage] = useState("dashboard");
   const navigate = useNavigate();
   const {
     adminData,
     user,
     logout,
   } = useAdminAuth();
+const [campaigns, setCampaigns] = useState(() => {
+  try {
+    return (
+      JSON.parse(localStorage.getItem("theater_campaigns")) || [
+        {
+          id: "weekend",
+          name: "Weekend combo reminder",
+          segment: "Frequent guests",
+          schedule: "Sat, 11:30 AM",
+          status: "Scheduled",
+          recipients: 248,
+        },
+      ]
+    );
+  } catch {
+    return [];
+  }
+});
 
-  const [activePage, setActivePage] =
-    useState("dashboard");
+const [campaignBuilderOpen, setCampaignBuilderOpen] = useState(false);
+const [editingCampaign, setEditingCampaign] = useState(null);
+
 
   const [mobileOpen, setMobileOpen] =
     useState(false);
@@ -280,9 +300,7 @@ export default function AdminDashboard() {
   const [workflowSteps, setWorkflowSteps] = useState(() => {
     try { return JSON.parse(localStorage.getItem("theater_workflow")) || [{ id: "received", label: "Order received", delay: "Immediately", enabled: true }, { id: "preparing", label: "Preparing", delay: "When kitchen starts", enabled: true }, { id: "ready", label: "Ready for pickup", delay: "When marked ready", enabled: true }]; } catch { return []; }
   });
-  const [campaigns, setCampaigns] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("theater_campaigns")) || [{ id: "weekend", name: "Weekend combo reminder", segment: "Frequent guests", schedule: "Sat, 11:30 AM", status: "Scheduled", recipients: 248 }]; } catch { return []; }
-  });
+
   const [campaignDraft, setCampaignDraft] = useState({ name: "", message: "Hi {{customer_name}}, enjoy 15% off your next cinema combo this weekend.", segment: "Frequent guests", schedule: "" });
 
   const [selectedOrder, setSelectedOrder] =
@@ -772,6 +790,7 @@ export default function AdminDashboard() {
     customers: { title: "Customers", subtitle: "View customer profiles and purchase history." },
     reports: { title: "Reports", subtitle: "Comprehensive analytics across all system modules." },
     settings: { title: "Settings", subtitle: "Configure main website URL, theater info, and admin preferences." },
+  
     menu: { title: "Menu Management", subtitle: "Manage your theater food menu." },
     banners: { title: "Banners", subtitle: "Manage hero and sidebar image banners." },
     offers: { title: "Offers & Combos", subtitle: "Create food combo offers and special deals." },
@@ -1778,128 +1797,179 @@ export default function AdminDashboard() {
     );
   }
 
-  function renderSettings() {
-    return (
-      <div className="settings-grid">
+function renderSettings() {
+  return (
+    <div className="settings-grid">
 
-        {/* Main Website URL — top priority card */}
-        <section className="admin-panel settings-card" style={{ gridColumn: "1 / -1", border: "1px solid rgba(0, 82, 255, 0.3)" }}>
-          <div className="panel-heading">
-            <div>
-              <span>ADVERTISEMENT REDIRECT</span>
-              <h2>Main Website URL</h2>
-            </div>
-            <Globe size={20} style={{ color: "#fff" }} />
+      {/* ================= MAIN WEBSITE URL ================= */}
+      <section className="admin-panel settings-card settings-url-card">
+        <div className="panel-heading">
+          <div>
+            <span>ADVERTISEMENT REDIRECT</span>
+            <h2>Main Website URL</h2>
           </div>
-          <p style={{ fontSize: "12px", color: "#888", margin: "0 0 16px" }}>
-            This is the base URL of your main movie-booking website. All advertisements can use this as their redirect destination.
-          </p>
-          <div className="settings-form">
-            <label style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <span style={{ fontSize: "11px", color: "#888", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px" }}>Main Website Base URL</span>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <div style={{ flex: 1, position: "relative" }}>
-                  <Globe size={14} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#666" }} />
-                  <input
-                    value={mainSiteUrlDraft}
-                    onChange={e => setMainSiteUrlDraft(e.target.value)}
-                    placeholder="https://your-movie-site.com"
-                    style={{ width: "100%", background: "var(--admin-surface, #0e1526)", border: "1px solid rgba(0, 82, 255, 0.2)", borderRadius: "8px", padding: "10px 14px 10px 34px", color: "#fff", fontSize: "13px", outline: "none", boxSizing: "border-box" }}
-                  />
-                </div>
-                <button
-                  onClick={() => {
-                    setMainSiteUrl(mainSiteUrlDraft);
-                    localStorage.setItem("cinema_main_site_url", mainSiteUrlDraft);
-                  }}
-                  className="primary-admin-button"
-                  style={{ whiteSpace: "nowrap", padding: "10px 20px" }}
-                >
-                  Save URL
-                </button>
+
+          <div className="settings-heading-icon">
+            <Globe size={19} />
+          </div>
+        </div>
+
+        <p className="settings-description">
+          This is the base URL of your main movie-booking website.
+          Advertisements can use this URL as their redirect destination.
+        </p>
+
+        <div className="settings-form">
+
+          <label className="settings-url-label">
+            <span>Main Website Base URL</span>
+
+            <div className="url-input-row">
+
+              <div className="url-input-wrapper">
+                <Globe className="url-input-icon" size={15} />
+
+                <input
+                  type="url"
+                  value={mainSiteUrlDraft}
+                  onChange={(e) =>
+                    setMainSiteUrlDraft(e.target.value)
+                  }
+                  placeholder="https://your-movie-site.com"
+                  className="settings-input url-input"
+                />
               </div>
-            </label>
-            <div style={{ marginTop: "12px", padding: "10px 14px", background: "rgba(0, 82, 255, 0.06)", borderRadius: "8px", border: "1px dashed rgba(0, 82, 255, 0.2)", fontSize: "12px", color: "#888" }}>
-              Saved: <span style={{ color: "#fff", fontWeight: 600 }}>{mainSiteUrl}</span>
-              <a href={mainSiteUrl} target="_blank" rel="noreferrer" style={{ marginLeft: "8px" }}>
-                <ExternalLink size={12} style={{ color: "#fff" }} />
+
+              <button
+                type="button"
+                onClick={() => {
+                  setMainSiteUrl(mainSiteUrlDraft);
+                  localStorage.setItem(
+                    "cinema_main_site_url",
+                    mainSiteUrlDraft
+                  );
+                }}
+                className="primary-admin-button save-url-button"
+              >
+                Save URL
+              </button>
+
+            </div>
+          </label>
+
+          {/* Saved URL */}
+          <div className="saved-url-box">
+            <span className="saved-url-label">Saved:</span>
+
+            <span className="saved-url-value">
+              {mainSiteUrl || "https://your-movie-site.com"}
+            </span>
+
+            {mainSiteUrl && (
+              <a
+                href={mainSiteUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="saved-url-link"
+              >
+                <ExternalLink size={13} />
               </a>
-            </div>
-          </div>
-        </section>
-
-        <section className="admin-panel settings-card">
-          <div className="panel-heading">
-            <div>
-              <span>THEATER</span>
-              <h2>Theater Settings</h2>
-            </div>
+            )}
           </div>
 
-          <div className="settings-form">
-            <label>
-              Theater Name
+        </div>
+      </section>
 
-              <input
-                value="CINÉMA Theater 01"
-                readOnly
-              />
-            </label>
 
-            <label>
-              Theater ID
+      {/* ================= THEATER SETTINGS ================= */}
+      <section className="admin-panel settings-card">
 
-              <input
-                value="THEATER-001"
-                readOnly
-              />
-            </label>
-
-            <label>
-              Default Tax
-
-              <input
-                value="5%"
-                readOnly
-              />
-            </label>
-
-            <button className="primary-admin-button">
-              Save Settings
-            </button>
+        <div className="panel-heading">
+          <div>
+            <span>THEATER</span>
+            <h2>Theater Settings</h2>
           </div>
-        </section>
+        </div>
 
-        <section className="admin-panel settings-card">
-          <div className="panel-heading">
-            <div>
-              <span>ADMIN ACCOUNT</span>
-              <h2>Your Account</h2>
-            </div>
+        <div className="settings-form">
+
+          <label className="settings-field">
+            <span>Theater Name</span>
+
+            <input
+              value="CINÉMA Theater 01"
+              readOnly
+              className="settings-input"
+            />
+          </label>
+
+
+          <label className="settings-field">
+            <span>Theater ID</span>
+
+            <input
+              value="THEATER-001"
+              readOnly
+              className="settings-input"
+            />
+          </label>
+
+
+          <label className="settings-field">
+            <span>Default Tax</span>
+
+            <input
+              value="5%"
+              readOnly
+              className="settings-input"
+            />
+          </label>
+
+
+          <button
+            type="button"
+            className="primary-admin-button settings-save-button"
+          >
+            Save Settings
+          </button>
+
+        </div>
+      </section>
+
+
+      {/* ================= ADMIN ACCOUNT ================= */}
+      <section className="admin-panel settings-card">
+
+        <div className="panel-heading">
+          <div>
+            <span>ADMIN ACCOUNT</span>
+            <h2>Your Account</h2>
+          </div>
+        </div>
+
+        <div className="account-details">
+
+          <div className="account-avatar">
+            {user?.email?.charAt(0).toUpperCase() || "A"}
           </div>
 
-          <div className="account-details">
-            <div className="account-avatar">
-              {user?.email
-                ?.charAt(0)
-                .toUpperCase() || "A"}
-            </div>
+          <div className="account-info">
+            <strong>
+              {user?.email || "Admin"}
+            </strong>
 
-            <div>
-              <strong>
-                {user?.email || "Admin"}
-              </strong>
-
-              <span>
-                {adminData?.role ||
-                  "ADMIN"}
-              </span>
-            </div>
+            <span>
+              {adminData?.role || "ADMIN"}
+            </span>
           </div>
-        </section>
-      </div>
-    );
-  }
+
+        </div>
+
+      </section>
+
+    </div>
+  );
+}
 
   function renderTheaterConfig() {
     return (
@@ -1966,19 +2036,228 @@ export default function AdminDashboard() {
     );
   }
 
-  function renderCampaigns() {
+function renderCampaigns() {
+  if (campaignBuilderOpen) {
     return (
-      <div className="campaign-layout">
-        <div className="campaign-kpis"><div><span>Scheduled broadcasts</span><strong>{campaigns.filter((campaign) => campaign.status === "Scheduled").length}</strong></div><div><span>Reach this week</span><strong>{campaigns.reduce((sum, campaign) => sum + campaign.recipients, 0).toLocaleString()}</strong></div><div><span>Primary channel</span><strong>WhatsApp</strong></div></div>
-        <div className="workflow-grid">
-          <section className="admin-panel workflow-card"><div className="panel-heading"><div><span>NEW CAMPAIGN</span><h2>Plan a broadcast</h2></div><Megaphone size={20} /></div><div className="config-fields"><label>Campaign name<input placeholder="e.g. Friday combo offer" value={campaignDraft.name} onChange={(e) => setCampaignDraft({ ...campaignDraft, name: e.target.value })} /></label><label>Audience segment<select value={campaignDraft.segment} onChange={(e) => setCampaignDraft({ ...campaignDraft, segment: e.target.value })}><option>Frequent guests</option><option>Recent customers</option><option>High-value customers</option><option>All customers</option></select></label><label className="full-field">Promotional message<textarea rows="5" value={campaignDraft.message} onChange={(e) => setCampaignDraft({ ...campaignDraft, message: e.target.value })} /></label><label className="full-field">Send time<input type="datetime-local" value={campaignDraft.schedule} onChange={(e) => setCampaignDraft({ ...campaignDraft, schedule: e.target.value })} /></label></div><button className="primary-admin-button" onClick={scheduleCampaign}><CalendarClock size={16} /> Schedule broadcast</button></section>
-          <section className="admin-panel segment-card"><div className="panel-heading"><div><span>AUDIENCE ESTIMATE</span><h2>Who will receive it?</h2></div><Users size={20} /></div><div className="segment-list"><div><span className="segment-icon gold"><Star size={16} /></span><p><strong>Frequent guests</strong><small>3+ orders in the last 60 days</small></p><b>248</b></div><div><span className="segment-icon blue"><Clock3 size={16} /></span><p><strong>Recent customers</strong><small>Ordered in the last 30 days</small></p><b>684</b></div><div><span className="segment-icon green"><TrendingUp size={16} /></span><p><strong>High-value customers</strong><small>₹1,000+ lifetime spend</small></p><b>96</b></div></div></section>
-        </div>
-        <section className="admin-panel campaign-list"><div className="panel-heading"><div><span>CAMPAIGN CALENDAR</span><h2>Scheduled messages</h2></div></div>{campaigns.map((campaign) => <div className="campaign-row" key={campaign.id}><span className="campaign-channel"><Send size={16} /></span><div><strong>{campaign.name}</strong><small>{campaign.segment} · {campaign.recipients} recipients</small></div><span className="campaign-time">{campaign.schedule}</span><span className="campaign-status">{campaign.status}</span></div>)}</section>
-      </div>
+      <CampaignBuilder
+        campaign={editingCampaign}
+        userId={user?.uid}
+        onSaved={(savedCampaign) => {
+          setCampaigns((current) => {
+            const exists = current.some(
+              (campaign) => campaign.id === savedCampaign.id
+            );
+
+            const next = exists
+              ? current.map((campaign) =>
+                  campaign.id === savedCampaign.id
+                    ? savedCampaign
+                    : campaign
+                )
+              : [savedCampaign, ...current];
+
+            localStorage.setItem(
+              "theater_campaigns",
+              JSON.stringify(next)
+            );
+
+            return next;
+          });
+
+          setCampaignBuilderOpen(false);
+          setEditingCampaign(null);
+        }}
+        onCancel={() => {
+          setCampaignBuilderOpen(false);
+          setEditingCampaign(null);
+        }}
+      />
     );
   }
 
+  return (
+    <div className="campaign-layout">
+
+      <div className="campaign-kpis">
+        <div>
+          <span>Campaigns</span>
+          <strong>{campaigns.length}</strong>
+        </div>
+
+        <div>
+          <span>Total Reach</span>
+          <strong>
+            {campaigns
+              .reduce(
+                (sum, campaign) =>
+                  sum + Number(campaign.recipients || 0),
+                0
+              )
+              .toLocaleString("en-IN")}
+          </strong>
+        </div>
+
+        <div>
+          <span>Primary Channel</span>
+          <strong>WhatsApp</strong>
+        </div>
+      </div>
+
+      <div className="workflow-grid">
+
+        <section className="admin-panel workflow-card">
+          <div className="panel-heading">
+            <div>
+              <span>WHATSAPP CAMPAIGN</span>
+              <h2>Visual Campaign Builder</h2>
+            </div>
+
+            <Megaphone size={20} />
+          </div>
+
+          <p>
+            Create customized WhatsApp marketing campaigns with
+            audience targeting, media, message variables,
+            interactive buttons, preview and scheduling.
+          </p>
+
+          <button
+            className="primary-admin-button"
+            onClick={() => {
+              setEditingCampaign(null);
+              setCampaignBuilderOpen(true);
+            }}
+          >
+            <Plus size={16} />
+            Create Campaign
+          </button>
+        </section>
+
+        <section className="admin-panel segment-card">
+          <div className="panel-heading">
+            <div>
+              <span>AUDIENCE</span>
+              <h2>Available Segments</h2>
+            </div>
+
+            <Users size={20} />
+          </div>
+
+          <div className="segment-list">
+
+            <div>
+              <span className="segment-icon gold">
+                <Star size={16} />
+              </span>
+
+              <p>
+                <strong>Frequent guests</strong>
+                <small>3+ orders in the last 60 days</small>
+              </p>
+
+              <b>248</b>
+            </div>
+
+            <div>
+              <span className="segment-icon blue">
+                <Clock3 size={16} />
+              </span>
+
+              <p>
+                <strong>Recent customers</strong>
+                <small>Ordered in the last 30 days</small>
+              </p>
+
+              <b>684</b>
+            </div>
+
+            <div>
+              <span className="segment-icon green">
+                <TrendingUp size={16} />
+              </span>
+
+              <p>
+                <strong>High-value customers</strong>
+                <small>₹1,000+ lifetime spend</small>
+              </p>
+
+              <b>96</b>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <section className="admin-panel campaign-list">
+
+        <div className="panel-heading">
+          <div>
+            <span>CAMPAIGN CALENDAR</span>
+            <h2>Campaigns</h2>
+          </div>
+        </div>
+
+        {campaigns.length === 0 ? (
+          <div
+            style={{
+              padding: "40px",
+              textAlign: "center",
+              color: "#777"
+            }}
+          >
+            No campaigns created yet.
+          </div>
+        ) : (
+          campaigns.map((campaign) => (
+            <div
+              className="campaign-row"
+              key={campaign.id}
+            >
+              <span className="campaign-channel">
+                <Send size={16} />
+              </span>
+
+              <div>
+                <strong>{campaign.name}</strong>
+
+                <small>
+                  {campaign.segment ||
+                    campaign.audience?.type ||
+                    "Audience"}{" "}
+                  ·{" "}
+                  {campaign.recipients ||
+                    campaign.audience?.recipientCount ||
+                    0}{" "}
+                  recipients
+                </small>
+              </div>
+
+              <span className="campaign-time">
+                {campaign.schedule || "Immediately"}
+              </span>
+
+              <span className="campaign-status">
+                {campaign.status || "Draft"}
+              </span>
+
+              <button
+                className="campaign-edit-button"
+                onClick={() => {
+                  setEditingCampaign(campaign);
+                  setCampaignBuilderOpen(true);
+                }}
+              >
+                <Pencil size={14} />
+              </button>
+            </div>
+          ))
+        )}
+
+      </section>
+    </div>
+  );
+}
   // ─────────────────────────────────────────────────────────────────
   // SALESMEN render
   // ─────────────────────────────────────────────────────────────────
